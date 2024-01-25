@@ -2,7 +2,7 @@
 
 
 $(function(){ 
-
+  
 
     ////////////////All documents//////////////////////////////////////////////////////////////////////
     
@@ -10,10 +10,11 @@ $(function(){
 
       console.log(data);
   
-       //   $.each(data,(i , value)=>{
-       //     let newRow = `<tr><td>${value.year}</td><td>  <a href="${value.Url}">${value.title}</a>  </td><td>${value.lastName}, ${value.Name} </td> <td> ${value.advisor}</td></tr>`
-      //      $('#maintable').append(newRow);
-      //    });
+         $.each(data,(i , value)=>{
+      
+           let newRow = `<tr><td>${value.year}</td><td>  <a href="/thesis/page/${value.id}">${value.title}</a>  </td><td>${value.lastName}, ${value.name} </td> <td> ${value.advisor}</td></tr>`
+            $('#maintable').append(newRow);
+          });
 
      })
       
@@ -34,7 +35,7 @@ $(function(){
                 
                   
              $.each(data,(i , value)=>{
-             let newRow = `<tr><td>${value.year}</td><td>  <a href="${value.Url}">${value.title}</a>  </td><td>${value.lastName}, ${value.Name} </td> <td> ${value.advisor}</td></tr>`
+             let newRow = `<tr><td>${value.year}</td><td>  <a href="/thesis/page/${value.id}">${value.title}</a>  </td><td>${value.lastName}, ${value.Name} </td> <td> ${value.advisor}</td></tr>`
              $('#maintable').append(newRow);
           });
                 
