@@ -5,9 +5,9 @@ const path = require('path');
 
 const router = express.Router();
 
- router.get('/upload/thesis',async(req,res,next)=>{
+ router.get('/page/id:',async(req,res,next)=>{
 
-    res.sendFile(path.join(__dirname, '../public/html', 'thesisupload.html'));
+    res.sendFile(path.join(__dirname, '../public/html', 'thesis.html'));
 
  });
 
