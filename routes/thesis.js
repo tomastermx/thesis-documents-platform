@@ -24,6 +24,11 @@
   });  
 
 
+  router.get('/upload' ,(req,res)=>{
+      res.sendFile(path.join(__dirname,'../public/html', 'thesisupload.html' ));
+  });
+
+
 
 
       router.get('/all', async(req,res,next)=>{
