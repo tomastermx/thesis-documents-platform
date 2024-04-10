@@ -2,7 +2,7 @@
 
         const db = require('../firebase/firebase');
       
-
+        const boom = require('@hapi/boom');        
 
 
 
@@ -13,11 +13,15 @@
 
           return str2;
          }
+
+
          /////////////// thesis class////////////////////////////////////////////////
  
          class thesisService{ 
           constuctor(){
          }
+            
+         
 
          //////////////////////////////Create thesis///////////////////////////////
          async create(data){
@@ -30,8 +34,10 @@
 
           /////////////////////Find all thesis function 
            async findAllThesis(){
+            
            const thesisRef = db.collection('thesis');
            const snapshot =  await thesisRef.get();
+           
               return snapshot.docs.map(doc => { 
               return {...{"id":doc.id}, ...doc.data()}
 
@@ -43,28 +49,31 @@
 
         const thesisRef = db.collection('thesis').doc(data);
         const document = await  thesisRef.get();
-       
-        return { ...{ id: document.id}, ...document.data() }
-
+        
+         if(document){
+        
+           return { ...{ id: document.id}, ...document.data() }
+ 
+         } else {  throw boom.notFound('doc not found');} 
 
       }
  
       ///////////////////////////SearchThesis///////////////////////
 
-        async searchThesis( filter, data ){
-           
+     async searchThesis( filter, data ){
+         
+        if(data){      
+
+
           let thesisRef;
           let snapshot;
-
+          let query = data.split(" "); 
 
            switch(filter){
-///////////////////////  //search by title ///////////////// 
+         ///////////////////////  //search by title ///////////////// 
             case 'title':
             
-               
-             let query = data.split(" ");
-             
-  
+              let j  = 0;   
 
                thesisRef = db.collection('thesis');
                snapshot =  await thesisRef.get();
@@ -75,74 +84,88 @@
                   console.log(query);
                   
                 for(let i = 0 ; i < query.length; i++){ 
-
-                       
+   
                     
-                    
-      if(title.includes(query[i]) || title.includes(modifyString(query[i])) || title.includes(query[i].toLowerCase()) && query[i]!=="" ){
-                      
+      if(title.includes(query[i]) || title.includes(modifyString(query[i])) || title.includes(query[i].toLowerCase())){
+                               j++;
                       return {...{"id":doc.id}, ...doc.data()};   
-                           
-                     }
-               
-                  
+                        
+                        }  
                      
-                  }   
-                
-
+                  }  
+                  if(j===0 ){  throw boom.notFound('not found');  }   
+             
                   
                  }); 
+
+         
               
                break;
  
                /////////////// search by author
              case 'author':
+
+
+
+              thesisRef = db.collection('thesis');
+              snapshot =  await thesisRef.get();
+              return  snapshot.docs.map(doc => {
+              
+                let authorName =  doc.data().name.split(" "); 
+                let authorLastname = doc.data().lastName.split(" ");
+              
+               
+              for(let i = 0 ; i < query.length; i++)
+                  if(authorName.includes(modifyString(query[i]))|| authorLastname.includes(modifyString(query[i])) && query[i] !== "" )
+                             
+                      
+                  return {...{"id":doc.id}, ...doc.data()};  
+                    
                 
-              modifyString(data); 
 
-                thesisRef = db.collection('thesis');
-                snapshot =  await thesisRef.where(Filter.or(
-                Filter.where('lastName', '==',data),
-                Filter.where('lastName','==', modifyString(data)),
-                Filter.where('Name', '==', data),
-                Filter.where('Name','==', modifyString(data))
+              })
 
-              )).get();
+            break;
+            
+            //// search by advisor
+           
+           
+             case 'advisor':
+            
+             thesisRef = db.collection('thesis');
+             snapshot =  await thesisRef.get();
+             return  snapshot.docs.map(doc => {
+             
+               let advisorName =  doc.data().aName.split(" "); 
+               let advisorLastname = doc.data().alastName.split(" ");
+             
+              
+             for(let i = 0 ; i < query.length; i++)
+                 if(advisorName.includes(modifyString(query[i]))|| advisorLastname.includes(modifyString(query[i]))){
 
-              return  snapshot.docs.map(doc => { 
-              return {...{"id":doc.id}, ...doc.data()} });
+                   
+         
+                  return {...{"id":doc.id}, ...doc.data()};  
+  
+                 
+               }
 
+
+             })
+            
               break;
             
-            // search by advisor
-            case 'advisor':
-            thesisRef = db.collection('thesis');
-            snapshot =  await thesisRef.where(Filter.or(
-              Filter.where('advisor', '==',data),
-              Filter.where('advisor', '==',modifyString(data))
-            )).get();
-                              
-             return  snapshot.docs.map(doc => { 
-             return {...{"id":doc.id}, ...doc.data()} });             
-
-
-            
-              break;
-            
-           // search by year
+           ///////////// search by year
             case 'year':
                thesisRef = db.collection('thesis');
-               snapshot =  await thesisRef.where('year','==',data ).get();
+               snapshot =  await thesisRef.where('year','==', data ).get();
               return  snapshot.docs.map(doc => { 
               return {...{"id":doc.id}, ...doc.data()} });
-
-          }
+             
+              }
            
-         
-
-
-
-      
+          } else { throw boom.notFound('not found');  }
+                  
                
           }   
 
