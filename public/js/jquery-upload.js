@@ -1,7 +1,23 @@
    $(function(){
 
-     
+      function modifyString(word){
 
+         const string2 = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(); 
+
+         return string2;
+        }  
+      
+         function modifyTitle(word){ 
+            const word2 = word.split(" ");
+
+           //  for(let word of word2 ){
+                        
+             //     word.split("");
+
+           //  }
+ 
+        }
+        
       var formData;
    
       for (i = new Date().getFullYear(); i > 1974; i--)
@@ -22,11 +38,12 @@
             let year = $('#yearpicker').val();
            // let file = $('#file')[0].files[0];
 
+
              if(title && name && lastName && aName && alastName && grade && year ){  
       
               
 
-            document.getElementById("thesis-title").innerHTML =  'Títulto de la tesis:' +" " + title;  
+            document.getElementById("thesis-title").innerHTML =  'Títulto de la tesis:' +" " +  title;  
             document.getElementById("thesis-author").innerHTML =  'Autor de la tesis:' +" " + lastName + " "  + name ; 
             document.getElementById("thesis-advisor").innerHTML = 'Asesor de la tesis:' +" " + alastName + " " + alastName; 
             document.getElementById("thesis-grade").innerHTML =    'Grado de la Tesis  :' +" " + grade;  
@@ -99,11 +116,11 @@
  
        formData.append('createdOn', createdOn);
        formData.append('file', file);
-       formData.append('title',title); 
-       formData.append('name', name);
-       formData.append('lastName',lastName);
-       formData.append('aName', aName);
-       formData.append('alastName',alastName);
+       formData.append('title', modifyString(title)); 
+       formData.append('name', modifyString(name));
+       formData.append('lastName',modifyString(lastName));
+       formData.append('aName', modifyString(aName));
+       formData.append('alastName', modifyString(alastName));
        formData.append('year', year);
        formData.append('grade',grade);
 
@@ -123,7 +140,7 @@
           success: function(data){ 
             console.log(data);      
             console.log('1+1');  
-           // window.location.replace("http://localhost:3000");          
+          window.location.replace("http://localhost:3000");          
           }
   
             

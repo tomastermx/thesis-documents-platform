@@ -2,12 +2,28 @@
  const path = require('path');
  const Multer = require('multer');
  const {format} = require('util');
+ const cors = require('cors');
+ const jwt = require('jsonwebtoken');
  const boom = require('@hapi/boom');  
  const bucket = require('../firebase/cloudstore');
  const thesisService = require('../services/thesis');
  const thesis = new thesisService();
 
+ require('dotenv').config()
 
+ let whitelist = ['http://localhost:3000/']
+ let corsOptions = {
+   origin: function (origin, callback) {
+     if (whitelist.indexOf(origin) !== -1) {
+       callback(null, true)
+     } else {
+       callback(console.log('Not allowed by CORS'))
+     }
+   }
+ }
+
+
+  
  const multer = Multer({
   storage: Multer.memoryStorage(),
   limits: {
@@ -32,9 +48,22 @@
 
 
 
-      router.get('/all', async(req,res,next)=>{
-           
-          const documents  =  await thesis.findAllThesis();
+      router.get('/all', cors(corsOptions), async(req,res,next)=>{
+
+
+          console.log(req.query);
+          
+          let token = req.query.token;
+
+          let page  = parseInt(req.query.page) || 1;
+          let limit = parseInt(req.query.limit) || 4;           
+          console.log(token);
+
+          jwt.verify(token, '9zhCWS6UtG',function(err,decoded){
+
+          });
+
+          const documents  =  await thesis.findAllThesis(limit,page);
           console.log(documents);
           res.status(200).json(documents); 
       });
@@ -60,9 +89,9 @@
            try {  
             const documents = await thesis.searchThesis( filter, data );
 
-          filterdocs = documents.filter((doc )=> doc );
-          console.log(filterdocs);
-          res.status(200).json(filterdocs);
+      
+          console.log(documents);
+          res.status(200).json(documents);
 
            } catch(error){ next(error); }
 
@@ -105,14 +134,12 @@
         
            const newDoc = await  thesis.create({...req.body,...{Url: publicUrl}});
             await res.json(newDoc);
-            next();
+          
 
 
-           } , (req,res)=>{
-                     console.log('next middleware')
+           
                 
-                      } );  
-     
+     } );  
 
    ////////////////////// delete   thesis ////////////////////////////////////////////////
          router.delete('/delete/:id', async(req,res,next)=>{

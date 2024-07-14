@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> Repositio de Tesis</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src='/js/jquery.js'> </script>
@@ -31,8 +32,8 @@
  
     <h1>Repositorio de Tesis de la UPD</h1>
 
-        <div class="container-fuid , text-bg-light p-3">
-          <form id="mainform"> 
+        <div class="container, text-bg-light p-3">
+          <form id="mainform" class="form-control form-control"> 
           <div class="row g-3">
              <div class="col-sm">
                <select id="select"  class="form-select" aria-label="Default select example">
@@ -46,7 +47,7 @@
             <div class="col-sm-7">
              <input  type="text" id="query" class="form-control" placeholder="" aria-label="State">
             </div>
-            <div class="col-sm">
+            <div class="col-sm d-grid gap-2 " >
               <button  type="submit"  id ="search" class="btn btn-outline-primary">Buscar</button>
             </div> 
           </form>          
@@ -57,8 +58,8 @@
          
 
          
-
-         <table  id="maintable" class="table table-striped">
+         <div class="table-responsive">
+          <table  id="maintable" class="table table-striped">
          
 
           <thead class="table-dark">
@@ -76,6 +77,9 @@
 
           </tbody>
         </table>
+      </div> 
+
+         
 
     </div>
   
