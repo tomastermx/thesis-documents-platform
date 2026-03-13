@@ -70,7 +70,7 @@ function getCookie(name) {
             
                 for(let i=1; i<=pages; i++ ){
                     
-                    $('ul').append('<li class="page-item"><a class="page-link" href="/?page='+ i + '">1</a></li>');        
+                    $('ul').append('<li class="page-item"><a class="page-link" href="/?page='+ i + '"> 33 </a></li>');        
                   }
 
              
